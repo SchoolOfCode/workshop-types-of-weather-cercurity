@@ -7,11 +7,19 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchWeather = async (city: string) => {
+  const fetchWeather = async (input: string, isZipcode: boolean) => {
     setLoading(true);
     setError(null);
+    
+    // Prepare the query URL based on whether the input is a city or a zipcode
+    const apiKey = '7f33b4e0f3f63f5a8742d7d6d7c20b01';
+    const query = isZipcode
+      ? `https://api.openweathermap.org/data/2.5/weather?zip=${input}&appid=7f33b4e0f3f63f5a8742d7d6d7c20b01`
+      : `https://api.openweathermap.org/data/2.5/weather?q=${input}&appid=7f33b4e0f3f63f5a8742d7d6d7c20b01`;
+    
+
     try {
-      const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=7f33b4e0f3f63f5a8742d7d6d7c20b01`);
+      const response = await fetch(query);
       if (!response.ok) {
         throw new Error('Failed to fetch weather data');
       }
@@ -31,7 +39,6 @@ const App: React.FC = () => {
       <SearchBar onSearch={fetchWeather} />
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}  {/* Display error if it exists */}
-      {/* {weather && <WeatherInfo weather={weather} />}  Display weather info when available */}
       {weather && <WeatherInfo weather={weather} />}
     </div>
   );
