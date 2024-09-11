@@ -1,29 +1,9 @@
-// import { useState } from 'react'
-
-
-// import './App.css'
-// import SearchBar from './components/SearchBar/SearchBar'
-
-// function App() {
-  
-
-//   return (
-//       <SearchBar />
-//   )
-// }
-
-// export default App
-
-
-
-
 import React, { useState } from 'react';
 import SearchBar from './components/SearchBar/SearchBar';
-// import WeatherInfo from './components/WeatherInfo/WeatherInfo'
-
+import WeatherInfo from './components/WeatherInfo/WeatherInfo'; // Import the WeatherInfo component
 
 const App: React.FC = () => {
-  const [weather, setWeather] = useState<any>(null); // Replace `any` with a more specific type if available
+  const [weather, setWeather] = useState<any>(null); // Replace `any` with a specific type if known
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -36,9 +16,9 @@ const App: React.FC = () => {
         throw new Error('Failed to fetch weather data');
       }
       const data = await response.json();
-      setWeather(data);
-       console.log (weather)
-    } catch (err) {
+      setWeather(data);  // Update the weather state
+      console.log(data);  // Log the fetched weather data, not the state
+    } catch (err: any) {  // Make sure `err` has `message` property
       setError(err.message);
     } finally {
       setLoading(false);
@@ -50,11 +30,11 @@ const App: React.FC = () => {
       <h1>Weather App</h1>
       <SearchBar onSearch={fetchWeather} />
       {loading && <p>Loading...</p>}
+      {error && <p>Error: {error}</p>}  {/* Display error if it exists */}
+      {/* {weather && <WeatherInfo weather={weather} />}  Display weather info when available */}
       {weather && <WeatherInfo weather={weather} />}
     </div>
   );
 };
 
-export default App
-
-
+export default App;
